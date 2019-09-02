@@ -1,6 +1,7 @@
 package br.com.fiap.hydroapp.ui.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import com.mobsandgeeks.saripaar.annotation.Password;
 import java.util.List;
 
 import br.com.fiap.hydroapp.R;
+import br.com.fiap.hydroapp.utils.KeyboardUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -63,9 +65,6 @@ public class SignUpActivity extends BaseAppCompatActivity implements TextWatcher
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-
-
-
         init();
     }
 
@@ -87,6 +86,7 @@ public class SignUpActivity extends BaseAppCompatActivity implements TextWatcher
         return new Validator.ValidationListener() {
             @Override
             public void onValidationSucceeded() {
+                signIn();
 
             }
 
@@ -127,14 +127,13 @@ public class SignUpActivity extends BaseAppCompatActivity implements TextWatcher
 
                 validator.validate();
 
-                
-
-
-
-
-
             }
         };
+    }
+
+    private void signIn(){
+        Intent intent = new Intent(SignUpActivity.this, BeforeLoginActivity.class);
+        startActivity(intent);
     }
 
 
@@ -150,6 +149,21 @@ public class SignUpActivity extends BaseAppCompatActivity implements TextWatcher
 
     @Override
     public void afterTextChanged(Editable editable) {
+        if(phone.length() == 9 && phone.isFocused()){
+            password.requestFocus();
+        }
 
+        if(ddd.length() == 2 && ddd.isFocused()){
+            phone.requestFocus();
+        }
+
+        if(password.length() == 8 && password.isFocused()){
+            retypePassword.requestFocus();
+        }
+
+        if(retypePassword.length() == 8 && retypePassword.isFocused()){
+            KeyboardUtils.hideKeyboard(SignUpActivity.this, retypePassword);
+        }
     }
 }
+
